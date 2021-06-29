@@ -12,6 +12,7 @@ import (
 type CreateOptions struct {
 	Name        string
 	Admin       bool
+	Global bool
 	ConfigFlags *genericclioptions.ConfigFlags
 	PrintFlags  *genericclioptions.PrintFlags
 }
@@ -35,11 +36,8 @@ func NewCreateCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Com
 
 	flags := cmd.Flags()
 	flags.BoolVar(&opt.Admin, "admin", false, "If true, create admin permission, else create readonly permission")
+	flags.BoolVar(&opt.Global, "global", false, "If true, create or delete ClusterRole, ClusterRoleBinding, else create or delete Role, RoleBinding")
 	return cmd
-}
-
-func (opt *CreateOptions) Complete() {
-
 }
 
 func (opt *CreateOptions) Validate(cmd *cobra.Command, args []string) {
@@ -59,7 +57,7 @@ func (opt *CreateOptions) RunCreate() {
 		os.Exit(2)
 	}
 
-	if err := kubeRBAC.Create(); err != nil {
+	if err := kubeRBAC.Create(opt.Global); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
 		os.Exit(2)
 	}

@@ -10,7 +10,7 @@ import (
 func (k *KubeRBAC) CreateRoleBinding() error {
 	roleBinding := createRoleBinding(k.name, k.namespace)
 
-	roleBinding, err := k.client.RbacV1().RoleBindings(k.namespace).Create(ctx, roleBinding, metav1.CreateOptions{})
+	_, err := k.client.RbacV1().RoleBindings(k.namespace).Create(ctx, roleBinding, metav1.CreateOptions{})
 	if err != nil {
 		return err
 	}
@@ -24,20 +24,24 @@ func (k *KubeRBAC) DeleteRoleBinding() error {
 
 func createRoleBinding(name, namespace string) *rbacv1.RoleBinding {
 	roleBinding := &rbacv1.RoleBinding{
+		TypeMeta: metav1.TypeMeta{
+			Kind:       RoleBindingKind,
+			APIVersion: rbacv1.SchemeGroupVersion.String(),
+		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: namespace,
 		},
 		Subjects: []rbacv1.Subject{
 			{
-				Kind:      "ServiceAccount",
+				Kind:      ServiceAccountKind,
 				Name:      name,
 				Namespace: namespace,
 			},
 		},
 		RoleRef: rbacv1.RoleRef{
 			APIGroup: "rbac.authorization.k8s.io",
-			Kind:     "Role",
+			Kind:     RoleKind,
 			Name:     name,
 		},
 	}

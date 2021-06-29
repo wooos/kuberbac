@@ -17,8 +17,16 @@ type KubeRBAC struct {
 	printer          printers.ResourcePrinter
 }
 
+const (
+	ServiceAccountKind = "ServiceAccount"
+	RoleKind = "Role"
+	RoleBindingKind = "RoleBinding"
+	ClusterRoleKind = "ClusterRole"
+	ClusterRoleBindingKind = "ClusterRoleBinding"
+)
+
 var (
-	ctx = context.Background()
+	ctx = context.TODO()
 )
 
 func NewKubeRBAC(kubeConfigFlags *genericclioptions.ConfigFlags, printFlags *genericclioptions.PrintFlags, name string, admin bool) (*KubeRBAC, error) {
@@ -54,9 +62,21 @@ func NewKubeRBAC(kubeConfigFlags *genericclioptions.ConfigFlags, printFlags *gen
 	return kubeRBAC, nil
 }
 
-func (k *KubeRBAC) Create() error {
+func (k *KubeRBAC) Create(global bool) error {
 	if err := k.CreateServiceAccount(); err != nil {
 		return err
+	}
+
+	if global {
+		if err := k.CreateClusterRole(); err != nil {
+			return err
+		}
+
+		if err := k.CreateClusterRoleBinding(); err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	if err := k.CreateRole(); err != nil {

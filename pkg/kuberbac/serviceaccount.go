@@ -1,6 +1,7 @@
 package kuberbac
 
 import (
+	"fmt"
 	"os"
 
 	corev1 "k8s.io/api/core/v1"
@@ -10,9 +11,9 @@ import (
 func (k *KubeRBAC) CreateServiceAccount() error {
 	serviceAccount := createServiceAccount(k.name, k.namespace)
 
-	serviceAccount, err := k.client.CoreV1().ServiceAccounts(k.namespace).Create(ctx, serviceAccount, metav1.CreateOptions{})
+	_, err := k.client.CoreV1().ServiceAccounts(k.namespace).Create(ctx, serviceAccount, metav1.CreateOptions{})
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create serviceaccount: %v", err)
 	}
 
 	return k.printer.PrintObj(serviceAccount, os.Stdout)
@@ -28,7 +29,7 @@ func createServiceAccount(name, namespace string) *corev1.ServiceAccount {
 			Name:      name,
 			Namespace: namespace,
 		},
-		TypeMeta: metav1.TypeMeta{APIVersion: corev1.SchemeGroupVersion.String(), Kind: "ServiceAccount"},
+		TypeMeta: metav1.TypeMeta{APIVersion: corev1.SchemeGroupVersion.String(), Kind: ServiceAccountKind},
 	}
 
 	return serviceAccount

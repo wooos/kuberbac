@@ -5,10 +5,6 @@ import (
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 )
 
-type options struct {
-	namespace string
-}
-
 func NewCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "kuberbac",

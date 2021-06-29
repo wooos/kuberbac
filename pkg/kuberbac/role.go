@@ -10,7 +10,7 @@ import (
 // CreateRole create a Role in kubernetes
 func (k *KubeRBAC) CreateRole() error {
 	role := createRole(k.name, k.namespace, k.admin)
-	role, err := k.client.RbacV1().Roles(k.namespace).Create(ctx, role, metav1.CreateOptions{})
+	_, err := k.client.RbacV1().Roles(k.namespace).Create(ctx, role, metav1.CreateOptions{})
 	if err != nil {
 		return err
 	}
@@ -29,6 +29,10 @@ func createRole(name, namespace string, admin bool) *rbacv1.Role {
 	}
 
 	role := &rbacv1.Role{
+		TypeMeta: metav1.TypeMeta{
+			Kind:       RoleKind,
+			APIVersion: rbacv1.SchemeGroupVersion.String(),
+		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: namespace,
