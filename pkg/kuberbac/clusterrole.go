@@ -27,14 +27,14 @@ func createClusterRole(name string, admin bool) *rbacv1.ClusterRole {
 	}
 
 	clusterRole := &rbacv1.ClusterRole{
-		TypeMeta:        metav1.TypeMeta{
+		TypeMeta: metav1.TypeMeta{
 			APIVersion: rbacv1.SchemeGroupVersion.String(),
-			Kind: "ClusterRole",
+			Kind:       "ClusterRole",
 		},
-		ObjectMeta:      metav1.ObjectMeta{
+		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
-		Rules:           rules,
+		Rules: rules,
 	}
 
 	return clusterRole

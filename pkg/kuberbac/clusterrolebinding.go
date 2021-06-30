@@ -22,21 +22,21 @@ func (k *KubeRBAC) DeleteClusterRoleBinding() error {
 
 func createClusterRoleBinding(name, namespace string) *rbacv1.ClusterRoleBinding {
 	clusterRoleBinding := &rbacv1.ClusterRoleBinding{
-		TypeMeta:   metav1.TypeMeta{
+		TypeMeta: metav1.TypeMeta{
 			APIVersion: metav1.SchemeGroupVersion.String(),
-			Kind: ClusterRoleBindingKind,
+			Kind:       ClusterRoleBindingKind,
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
-		Subjects:   []rbacv1.Subject{
+		Subjects: []rbacv1.Subject{
 			{
-				Kind: ServiceAccountKind,
-				Name: name,
+				Kind:      ServiceAccountKind,
+				Name:      name,
 				Namespace: namespace,
 			},
 		},
-		RoleRef:    rbacv1.RoleRef{
+		RoleRef: rbacv1.RoleRef{
 			APIGroup: "rbac.authorization.k8s.io",
 			Kind:     ClusterRoleKind,
 			Name:     name,

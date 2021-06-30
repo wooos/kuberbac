@@ -12,6 +12,7 @@ import (
 type DeleteOptions struct {
 	Name        string
 	Admin       bool
+	Global      bool
 	ConfigFlags *genericclioptions.ConfigFlags
 	PrintFlags  *genericclioptions.PrintFlags
 }
@@ -29,6 +30,9 @@ func NewDeleteCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Com
 			opt.RunDelete()
 		},
 	}
+
+	flags := cmd.Flags()
+	flags.BoolVar(&opt.Global, "global", false, "If true, delete ClusterRole, ClusterRoleBinding, else delete Role, RoleBinding")
 
 	return cmd
 }
@@ -50,7 +54,7 @@ func (opt *DeleteOptions) RunDelete() {
 		os.Exit(2)
 	}
 
-	if err := kubeRBAC.Delete(); err != nil {
+	if err := kubeRBAC.Delete(opt.Global); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
 		os.Exit(2)
 	}

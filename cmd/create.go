@@ -12,7 +12,7 @@ import (
 type CreateOptions struct {
 	Name        string
 	Admin       bool
-	Global bool
+	Global      bool
 	ConfigFlags *genericclioptions.ConfigFlags
 	PrintFlags  *genericclioptions.PrintFlags
 }
@@ -36,7 +36,7 @@ func NewCreateCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Com
 
 	flags := cmd.Flags()
 	flags.BoolVar(&opt.Admin, "admin", false, "If true, create admin permission, else create readonly permission")
-	flags.BoolVar(&opt.Global, "global", false, "If true, create or delete ClusterRole, ClusterRoleBinding, else create or delete Role, RoleBinding")
+	flags.BoolVar(&opt.Global, "global", false, "If true, create ClusterRole, ClusterRoleBinding, else create Role, RoleBinding")
 	return cmd
 }
 

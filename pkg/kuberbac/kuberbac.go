@@ -18,10 +18,10 @@ type KubeRBAC struct {
 }
 
 const (
-	ServiceAccountKind = "ServiceAccount"
-	RoleKind = "Role"
-	RoleBindingKind = "RoleBinding"
-	ClusterRoleKind = "ClusterRole"
+	ServiceAccountKind     = "ServiceAccount"
+	RoleKind               = "Role"
+	RoleBindingKind        = "RoleBinding"
+	ClusterRoleKind        = "ClusterRole"
 	ClusterRoleBindingKind = "ClusterRoleBinding"
 )
 
@@ -90,13 +90,23 @@ func (k *KubeRBAC) Create(global bool) error {
 	return nil
 }
 
-func (k *KubeRBAC) Delete() error {
-	if err := k.DeleteRoleBinding(); err != nil {
-		return err
-	}
+func (k *KubeRBAC) Delete(global bool) error {
+	if global {
+		if err := k.DeleteClusterRoleBinding(); err != nil {
+			return err
+		}
 
-	if err := k.DeleteRole(); err != nil {
-		return err
+		if err := k.DeleteClusterRole(); err != nil {
+			return err
+		}
+	} else {
+		if err := k.DeleteRoleBinding(); err != nil {
+			return err
+		}
+
+		if err := k.DeleteRole(); err != nil {
+			return err
+		}
 	}
 
 	if err := k.DeleteServiceAccount(); err != nil {
