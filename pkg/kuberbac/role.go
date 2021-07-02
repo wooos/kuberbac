@@ -1,7 +1,7 @@
 package kuberbac
 
 import (
-	"os"
+	"kuberbac/pkg/kuberbac/util"
 
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -12,10 +12,10 @@ func (k *KubeRBAC) CreateRole() error {
 	role := createRole(k.name, k.namespace, k.admin)
 	_, err := k.client.RbacV1().Roles(k.namespace).Create(ctx, role, metav1.CreateOptions{})
 	if err != nil {
-		return err
+		return util.CheckError(err)
 	}
 
-	return k.printer.PrintObj(role, os.Stdout)
+	return nil
 }
 
 func (k *KubeRBAC) DeleteRole() error {

@@ -1,11 +1,9 @@
 package kuberbac
 
 import (
-	"fmt"
-	"os"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"kuberbac/pkg/kuberbac/util"
 )
 
 func (k *KubeRBAC) CreateServiceAccount() error {
@@ -13,10 +11,10 @@ func (k *KubeRBAC) CreateServiceAccount() error {
 
 	_, err := k.client.CoreV1().ServiceAccounts(k.namespace).Create(ctx, serviceAccount, metav1.CreateOptions{})
 	if err != nil {
-		return fmt.Errorf("failed to create serviceaccount: %v", err)
+		return util.CheckError(err)
 	}
 
-	return k.printer.PrintObj(serviceAccount, os.Stdout)
+	return nil
 }
 
 func (k *KubeRBAC) DeleteServiceAccount() error {

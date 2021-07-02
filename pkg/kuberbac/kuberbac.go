@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"k8s.io/cli-runtime/pkg/genericclioptions"
-	"k8s.io/cli-runtime/pkg/printers"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -14,7 +13,6 @@ type KubeRBAC struct {
 	namespace        string
 	enforceNamespace bool
 	admin            bool
-	printer          printers.ResourcePrinter
 }
 
 const (
@@ -29,7 +27,7 @@ var (
 	ctx = context.TODO()
 )
 
-func NewKubeRBAC(kubeConfigFlags *genericclioptions.ConfigFlags, printFlags *genericclioptions.PrintFlags, name string, admin bool) (*KubeRBAC, error) {
+func NewKubeRBAC(kubeConfigFlags *genericclioptions.ConfigFlags, name string, admin bool) (*KubeRBAC, error) {
 	cfg, err := kubeConfigFlags.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -45,18 +43,12 @@ func NewKubeRBAC(kubeConfigFlags *genericclioptions.ConfigFlags, printFlags *gen
 		return nil, err
 	}
 
-	printer, err := printFlags.ToPrinter()
-	if err != nil {
-		return nil, err
-	}
-
 	kubeRBAC := &KubeRBAC{
 		client:           client,
 		name:             name,
 		namespace:        namespace,
 		enforceNamespace: enforceNamespace,
 		admin:            admin,
-		printer:          printer,
 	}
 
 	return kubeRBAC, nil

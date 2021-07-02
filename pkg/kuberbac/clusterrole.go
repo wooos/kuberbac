@@ -3,17 +3,16 @@ package kuberbac
 import (
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"os"
 )
 
 func (k *KubeRBAC) CreateClusterRole() error {
 	clusterRole := createClusterRole(k.name, k.admin)
 	_, err := k.client.RbacV1().ClusterRoles().Create(ctx, clusterRole, metav1.CreateOptions{})
 	if err != nil {
-		return err
+		return util.CheckError(err)
 	}
 
-	return k.printer.PrintObj(clusterRole, os.Stdout)
+	return nil
 }
 
 func (k *KubeRBAC) DeleteClusterRole() error {

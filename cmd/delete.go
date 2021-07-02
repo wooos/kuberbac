@@ -14,7 +14,6 @@ type DeleteOptions struct {
 	Admin       bool
 	Global      bool
 	ConfigFlags *genericclioptions.ConfigFlags
-	PrintFlags  *genericclioptions.PrintFlags
 }
 
 func NewDeleteCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Command {
@@ -48,7 +47,7 @@ func (opt *DeleteOptions) Validate(cmd *cobra.Command, args []string) {
 }
 
 func (opt *DeleteOptions) RunDelete() {
-	kubeRBAC, err := kuberbac.NewKubeRBAC(opt.ConfigFlags, opt.PrintFlags, opt.Name, opt.Admin)
+	kubeRBAC, err := kuberbac.NewKubeRBAC(opt.ConfigFlags, opt.Name, opt.Admin)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
 		os.Exit(2)
