@@ -1,6 +1,7 @@
 package kuberbac
 
 import (
+	"kuberbac/pkg/kuberbac/printer"
 	"kuberbac/pkg/kuberbac/util"
 
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -15,7 +16,7 @@ func (k *KubeRBAC) CreateRole() error {
 		return util.CheckError(err)
 	}
 
-	return nil
+	return printer.PrintObj(role, "created")
 }
 
 func (k *KubeRBAC) DeleteRole() error {

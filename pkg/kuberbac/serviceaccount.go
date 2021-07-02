@@ -1,9 +1,11 @@
 package kuberbac
 
 import (
+	"kuberbac/pkg/kuberbac/printer"
+	"kuberbac/pkg/kuberbac/util"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"kuberbac/pkg/kuberbac/util"
 )
 
 func (k *KubeRBAC) CreateServiceAccount() error {
@@ -14,7 +16,7 @@ func (k *KubeRBAC) CreateServiceAccount() error {
 		return util.CheckError(err)
 	}
 
-	return nil
+	return printer.PrintObj(serviceAccount, "created")
 }
 
 func (k *KubeRBAC) DeleteServiceAccount() error {

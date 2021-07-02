@@ -1,6 +1,7 @@
 package kuberbac
 
 import (
+	"kuberbac/pkg/kuberbac/printer"
 	"kuberbac/pkg/kuberbac/util"
 
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -14,7 +15,7 @@ func (k *KubeRBAC) CreateClusterRoleBinding() error {
 		return util.CheckError(err)
 	}
 
-	return nil
+	return printer.PrintObj(clusterRoleBinding, "created")
 }
 
 func (k *KubeRBAC) DeleteClusterRoleBinding() error {

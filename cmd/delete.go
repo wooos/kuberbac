@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"kuberbac/pkg/kuberbac"
-	"os"
 
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -24,9 +23,16 @@ func NewDeleteCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Com
 	cmd := &cobra.Command{
 		Use:   "delete <NAME>",
 		Short: "Quick delete of kubernetes RBAC",
-		Run: func(cmd *cobra.Command, args []string) {
-			opt.Validate(cmd, args)
-			opt.RunDelete()
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := opt.Validate(cmd, args); err != nil {
+				return err
+			}
+
+			if err := opt.RunDelete(); err != nil {
+				return err
+			}
+
+			return nil
 		},
 	}
 
@@ -36,25 +42,28 @@ func NewDeleteCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Com
 	return cmd
 }
 
-func (opt *DeleteOptions) Validate(cmd *cobra.Command, args []string) {
-	if len(args) != 1 {
-		fmt.Fprint(os.Stderr, "Error: NAME is required.\nSee 'kuberbac delete -h' for help and examples\n")
-		os.Exit(1)
+func (opt *DeleteOptions) Validate(cmd *cobra.Command, args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("NAME is required.\nSee 'kuberbac delete -h' for help and examples")
+	}
+
+	if len(args) > 1 {
+		return fmt.Errorf("exactly one NAME is required, got %d\nSee 'kuberbac create -h' for help and examples", len(args))
 	}
 
 	opt.Name = args[0]
-	return
+	return nil
 }
 
-func (opt *DeleteOptions) RunDelete() {
+func (opt *DeleteOptions) RunDelete() error {
 	kubeRBAC, err := kuberbac.NewKubeRBAC(opt.ConfigFlags, opt.Name, opt.Admin)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
-		os.Exit(2)
+		return err
 	}
 
 	if err := kubeRBAC.Delete(opt.Global); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
-		os.Exit(2)
+		return err
 	}
+
+	return nil
 }
