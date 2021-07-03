@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"github.com/spf13/cobra"
@@ -6,7 +6,7 @@ import (
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 )
 
-func NewCommand() *cobra.Command {
+func newRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:          "kuberbac",
 		Short:        "Quick create or delete of kubernetes RBAC",
@@ -19,9 +19,9 @@ func NewCommand() *cobra.Command {
 	addKubeConfigFlags(kubeConfigFlags, flags)
 
 	cmd.AddCommand(
-		NewCreateCommand(kubeConfigFlags),
-		NewDeleteCommand(kubeConfigFlags),
-		NewCompletionCommand(),
+		newCreateCmd(kubeConfigFlags),
+		newDeleteCommand(kubeConfigFlags),
+		newCompletionCommand(),
 	)
 	return cmd
 }

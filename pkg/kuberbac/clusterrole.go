@@ -23,7 +23,7 @@ func (k *KubeRBAC) DeleteClusterRole() error {
 }
 
 func createClusterRole(name string, admin bool) *rbacv1.ClusterRole {
-	rules := []rbacv1.PolicyRule{{APIGroups: []string{"*"}, Resources: []string{"*"}, Verbs: []string{"GET", "LIST"}}}
+	rules := []rbacv1.PolicyRule{{APIGroups: []string{"*"}, Resources: []string{"*"}, Verbs: []string{"get", "list"}}}
 	if admin {
 		rules = []rbacv1.PolicyRule{{APIGroups: []string{"*"}, Resources: []string{"*"}, Verbs: []string{"*"}}}
 	}

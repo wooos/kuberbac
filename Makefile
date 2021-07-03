@@ -18,7 +18,7 @@ SRC        := $(shell find . -type f -name '*.go' -print)
 build: $(BINDIR)/$(BINNAME)
 
 $(BINDIR)/$(BINNAME):
-	GO111MODULE=on go build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $(BINDIR)/$(BINNAME) main.go
+	GO111MODULE=on go build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $(BINDIR)/$(BINNAME) ./cmd/kuberbac/
 
 #
 .PHONY clean:

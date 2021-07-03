@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ var completionShells = map[string]func(cmd *cobra.Command){
 	"zsh": runCompletionZsh,
 }
 
-func NewCompletionCommand() *cobra.Command {
+func newCompletionCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "completion SHELL",
 		Short: "Generate auto completions script for kuberbac for the specified shell (bash or zsh)",

@@ -34,3 +34,12 @@ func createServiceAccount(name, namespace string) *corev1.ServiceAccount {
 
 	return serviceAccount
 }
+
+func (k *KubeRBAC) GetServiceAccount() (*corev1.ServiceAccount, error) {
+	serviceAccount, err := k.client.CoreV1().ServiceAccounts(k.namespace).Get(ctx, k.name, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	return serviceAccount, nil
+}

@@ -1,22 +1,21 @@
-package cmd
+package main
 
 import (
 	"fmt"
-	"kuberbac/pkg/kuberbac"
-
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+	"kuberbac/pkg/kuberbac"
 )
 
-type DeleteOptions struct {
+type deleteOptions struct {
 	Name        string
 	Admin       bool
 	Global      bool
 	ConfigFlags *genericclioptions.ConfigFlags
 }
 
-func NewDeleteCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Command {
-	opt := DeleteOptions{
+func newDeleteCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Command {
+	opt := deleteOptions{
 		ConfigFlags: kubeConfigFlags,
 	}
 
@@ -42,7 +41,7 @@ func NewDeleteCommand(kubeConfigFlags *genericclioptions.ConfigFlags) *cobra.Com
 	return cmd
 }
 
-func (opt *DeleteOptions) Validate(cmd *cobra.Command, args []string) error {
+func (opt *deleteOptions) Validate(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf("NAME is required.\nSee 'kuberbac delete -h' for help and examples")
 	}
@@ -55,7 +54,7 @@ func (opt *DeleteOptions) Validate(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func (opt *DeleteOptions) RunDelete() error {
+func (opt *deleteOptions) RunDelete() error {
 	kubeRBAC, err := kuberbac.NewKubeRBAC(opt.ConfigFlags, opt.Name, opt.Admin)
 	if err != nil {
 		return err

@@ -24,7 +24,7 @@ func (k *KubeRBAC) DeleteRole() error {
 }
 
 func createRole(name, namespace string, admin bool) *rbacv1.Role {
-	rules := []rbacv1.PolicyRule{{APIGroups: []string{"*"}, Resources: []string{"*"}, Verbs: []string{"GET", "LIST"}}}
+	rules := []rbacv1.PolicyRule{{APIGroups: []string{"*"}, Resources: []string{"*"}, Verbs: []string{"get", "list"}}}
 	if admin {
 		rules = []rbacv1.PolicyRule{{APIGroups: []string{"*"}, Resources: []string{"*"}, Verbs: []string{"*"}}}
 	}
